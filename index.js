@@ -1,38 +1,21 @@
-let http = require("http");
-let fs = require("fs");
+const express = require("express");
+const app = express();
+let path = require("path");
 
-http
-  .createServer(function (req, res) {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    switch (req.url) {
-      case "/":
-        //index
-        fs.readFile("index.html", function (err, data) {
-          res.write(data);
-          return res.end();
-        });
-        break;
-      case "/about":
-        //about
-        fs.readFile("about.html", function (err, data) {
-          res.write(data);
-          return res.end();
-        });
-        break;
-      case "/contact-me":
-        //contact
-        fs.readFile("contact-me.html", function (err, data) {
-          res.write(data);
-          return res.end();
-        });
-        break;
-      default:
-        fs.readFile("404.html", function (err, data) {
-          res.write(data);
-          return res.end();
-        });
-        //404
-        break;
-    }
-  })
-  .listen(8080);
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/index.html"));
+});
+
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname + "/about.html"));
+});
+
+app.get("/contact-me", (req, res) => {
+  res.sendFile(path.join(__dirname + "/contact-me.html"));
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/404.html"));
+});
+
+app.listen(8080);
